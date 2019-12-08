@@ -13,3 +13,32 @@
     height: 50%;
     float:right;
   }
+  #radarr1 {
+    width:20%;
+    height: 50%;
+    float:left;
+  }
+  #radarr2 {
+    width:20%;
+    height: 50%;
+    float:left;
+  }
+  #radarr3 {
+    width:20%;
+    height: 50%;
+    float:left;
+  }
+  #radarr4 {
+    width:20%;
+    height: 50%;
+    float:left;
+  }
+  #radarr5 {
+    width:20%;
+    height: 50%;
+    float:left;
+  }
+  #popchart {
+    width: 700px;
+    height: 500px;
+  }

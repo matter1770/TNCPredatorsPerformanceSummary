@@ -9,7 +9,7 @@ const JSONFileName = '/data.json';
 
 
 ['mousemove', 'touchmove', 'touchstart'].forEach(function (eventType) {
-    document.getElementById('wrapper').addEventListener(
+    document.getElementById('line').addEventListener(
         eventType,
         function (e) {
             var chart,
@@ -70,7 +70,82 @@ function syncExtremes(e) {
 
 
 
-stackedchart = new Highcharts.chart('container', {
+
+var popchart = AmCharts.makeChart("popchart", {
+    "type": "serial",
+    "rotate": true,
+    "marginBottom": 50,
+    "dataProvider": [],
+    "startDuration": 1,
+    "graphs": [{
+      "fillAlphas": 0.8,
+      "lineAlpha": 0.2,
+      "type": "column",
+      "valueField": "tnc",
+      "title": "TNC",
+      "lineColor": "#4f81bc",
+      "clustered": false,
+      "labelText": "[[value]]",
+      "labelFunction": function(item) {
+        return Math.abs(item.values.value);
+      },
+      "balloonFunction": function(item) {
+        return  "TNC: " + Math.abs(item.values.value);
+      }
+    }, {
+      "fillAlphas": 0.8,
+      "lineAlpha": 0.2,
+      "type": "column",
+      "valueField": "other",
+      "title": "Other",
+      "lineColor": "#c0504e",
+      "clustered": false,
+      "labelText": "[[value]]",
+      "labelFunction": function(item) {
+        return Math.abs(item.values.value);
+      },
+      "balloonFunction": function(item) {
+        return item.category + ": " + Math.abs(item.values.value) ;
+      }
+    }],
+    "categoryField": "team",
+    "categoryAxis": {
+      "gridPosition": "start",
+      "gridAlpha": 0.2,
+      "axisAlpha": 0
+    },
+    "valueAxes": [{
+      "gridAlpha": 0,
+      "ignoreAxisWidth": true,
+      "labelFunction": function(value) {
+        return Math.abs(value);
+      },
+      "guides": [{
+        "value": 0,
+        "lineAlpha": 0.2
+      }]
+    }],
+    "allLabels": [{
+      "text": "TNC",
+      "x": "28%",
+      "y": "97%",
+      "bold": true,
+      "align": "middle"
+    }, {
+      "text": "Other",
+      "x": "75%",
+      "y": "97%",
+      "bold": true,
+      "align": "middle"
+    }]
+  
+  });
+  
+  
+
+
+
+stackedchart = new Highcharts.chart({
     chart: {
         renderTo: 'stack',
         type: 'bar',
@@ -78,6 +153,10 @@ stackedchart = new Highcharts.chart('container', {
     },
     title: {
       text: 'Time to take objectives'
+    },
+    xAxis:{
+        visible : false,
+        crosshair : false
     },
     yAxis: {
       min: 0,
@@ -88,27 +167,172 @@ stackedchart = new Highcharts.chart('container', {
     legend: {
       reversed: true
     },
+    tooltip:{
+        enabled : false
+
+    },
     plotOptions: {
       series: {
-        stacking: 'normal'
-      }
+        stacking: 'normal',
+        states: {
+            hover: {
+                enabled: false
+                }
+            }
+        }
     },
     series: [{
-      name: 'Tower 1',
-      data: []
-    }, {
-      name: 'Tower 2',
+      name: 'Barracks',
       data: []
     }, {
       name: 'Tower 3',
       data: []
+    }, {
+      name: 'Tower 2',
+      data: []
     },{
-        name: 'Barracks',
+        name: 'Tower 1',
         data: []
-    }]
+    }],
+    exporting: {
+        buttons: {
+            contextButton: {
+                enabled: false
+            }    
+        }
+    }
   });
 
-
+var ctx1 = document.getElementById('radar1').getContext('2d');
+var ctx2 = document.getElementById('radar2').getContext('2d');
+var ctx3 = document.getElementById('radar3').getContext('2d');
+var ctx4 = document.getElementById('radar4').getContext('2d');
+var ctx5 = document.getElementById('radar5').getContext('2d');
+var radarChart1 = new Chart(ctx1, {
+    type: 'radar',
+    data: {
+        labels: ["Gold Per Minute", "XP Per Minute", "Last Hits Per Minute", "Kills Per Minute", "Deaths Per Minute", "Assists Per Minute"],
+        datasets: [{
+          label: "Temp",
+          fill: false,
+          backgroundColor: "rgba(179,181,198,0.2)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          data: [0, 1, 2, 3, 4, 5]
+        }]
+    },
+    options: {
+        tooltips: {
+            enabled: true,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].label + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                }
+            }
+        }
+    }
+});
+var radarChart2 = new Chart(ctx2, {
+    type: 'radar',
+    data: {
+        labels: ["Gold Per Minute", "XP Per Minute", "Last Hits Per Minute", "Kills Per Minute", "Deaths Per Minute", "Assists Per Minute"],
+        datasets: [{
+          label: "Temp",
+          fill: false,
+          backgroundColor: "rgba(179,181,198,0.2)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          data: [0, 1, 2, 3, 4, 5]
+        }]
+    },
+    options: {
+        tooltips: {
+            enabled: true,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].label + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                }
+            }
+        }
+    }
+});
+var radarChart3 = new Chart(ctx3, {
+    type: 'radar',
+    data: {
+        labels: ["Gold Per Minute", "XP Per Minute", "Last Hits Per Minute", "Kills Per Minute", "Deaths Per Minute", "Assists Per Minute"],
+        datasets: [{
+          label: "Temp",
+          fill: false,
+          backgroundColor: "rgba(179,181,198,0.2)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          data: [0, 1, 2, 3, 4, 5]
+        }]
+    },
+    options: {
+        tooltips: {
+            enabled: true,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].label + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                }
+            }
+        }
+    }
+});
+var radarChart4 = new Chart(ctx4, {
+    type: 'radar',
+    data: {
+        labels: ["Gold Per Minute", "XP Per Minute", "Last Hits Per Minute", "Kills Per Minute", "Deaths Per Minute", "Assists Per Minute"],
+        datasets: [{
+          label: "Temp",
+          fill: false,
+          backgroundColor: "rgba(179,181,198,0.2)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          data: [0, 1, 2, 3, 4, 5]
+        }]
+    },
+    options: {
+        tooltips: {
+            enabled: true,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].label + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                }
+            }
+        }
+    }
+});
+var radarChart5 = new Chart(ctx5, {
+    type: 'radar',
+    data: {
+        labels: ["Gold Per Minute", "XP Per Minute", "Last Hits Per Minute", "Kills Per Minute", "Deaths Per Minute", "Assists Per Minute"],
+        datasets: [{
+          label: "Temp",
+          fill: false,
+          backgroundColor: "rgba(179,181,198,0.2)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          data: [0, 1, 2, 3, 4, 5]
+        }]
+    },
+    options: {
+        tooltips: {
+            enabled: true,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].label + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                }
+            }
+        }
+    }
+});
 
 
 
@@ -185,6 +409,9 @@ Highcharts.ajax({
                         events: {
                             mouseOver: function () {
                                 var nodeId = (this.x)
+                                renderStackedChart(nodeId)
+                                renderRadarChart(nodeId)
+                                renderPopChart(nodeId)
 
                             }
                         
@@ -274,6 +501,9 @@ Highcharts.ajax({
                         events: {
                             mouseOver: function () {
                                 var nodeId = (this.x)
+                                renderStackedChart(nodeId)
+                                renderRadarChart(nodeId)
+                                renderPopChart(nodeId)
 
                             }
                         
@@ -362,6 +592,9 @@ Highcharts.ajax({
                         events: {
                             mouseOver: function () {
                                 var nodeId = (this.x)
+                                renderStackedChart(nodeId)
+                                renderRadarChart(nodeId)
+                                renderPopChart(nodeId)
 
                             }
                         
@@ -436,6 +669,9 @@ function onSuccessCb(jsonData) {
         player_stats.push(jsonData[i]['player_stats'])
         records.push(jsonData[i]['records'])
     }
+    renderStackedChart(0)
+    renderRadarChart(0)
+    renderPopChart(0)
 }
 
 
@@ -444,12 +680,42 @@ function renderStackedChart(nodeId) {
     keys = Object.keys(dataset)
 
     for(i= 0; i < keys.length; i++){
-        stackedchart.series[i].setData([dataset[keys[i]]]);
+        stackedchart.series[3-i].setData([dataset[keys[i]]]);
 
     }
   }
 
+function renderRadarChart(nodeId) {
+    dataset = player_stats[nodeId]
+    keys = Object.keys(dataset)
+    charts = [radarChart1,radarChart2,radarChart3,radarChart4,radarChart5]
+    for(i= 0; i < charts.length; i++){
+        stats = dataset[keys[i]]
+        stats_keys = Object.keys(stats)
+        for(j=0;j<stats_keys.length;j++){
+            charts[i].data.datasets[0].data[j] = stats[stats_keys[j]]
+            charts[i].data.datasets[0].label = keys[i]
+            charts[i].update();
+        }   
+    }
+  }
 
+function renderPopChart(nodeId) {
+    record = records[nodeId]
+    newData = []
+    for(i=0;i < Object.keys(record).length;i++){
+        key = Object.keys(record)[i]
+        rec = record[key]
+        name = key
+        tnc = -rec[0]
+        other = rec[1]
+        newData.push({"team":name,"tnc":tnc,"other":other})
+    }
+    popchart.dataProvider = newData;
+    popchart.validateData();
+}
+
+   
 
 function onMouseoverChart(e) {
     if (e['target'] === 'node') {
