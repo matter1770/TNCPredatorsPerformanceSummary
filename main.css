@@ -1,0 +1,15 @@
+
+
+#wrapper {
+    width:1200px;
+    clear:both;
+  }
+  #line {
+    width:66%;
+    float:left;
+  }
+  #stack {
+    width:33%;
+    height: 50%;
+    float:right;
+  }
